@@ -40,6 +40,7 @@ export default class Form extends Component {
 					autoCapitalize={'none'}
 					returnKeyType={'done'}
 					autoCorrect={false} />
+					
 				<UserInput source={passwordImg}
 					secureTextEntry={this.state.showPass}
 					placeholder='Password'

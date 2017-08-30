@@ -1,4 +1,4 @@
-package com.loginanimation;
+package com.sberpb;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "loginAnimation";
+        return "sberpb";
     }
 }

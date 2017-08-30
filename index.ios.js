@@ -8,7 +8,7 @@ import {
 
 import Main from './src/components/Main';
 
-export default class loginAnimation extends Component {
+export default class sberpb extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('loginAnimation', () => loginAnimation);
+AppRegistry.registerComponent('sberpb', () => sberpb);
