@@ -7,14 +7,31 @@ import SignupSection from './SignupSection';
 
 
 import {
-  AsyncStorage,
+  //AsyncStorage,
   Alert,
 } from 'react-native';
 
 GLOBAL = require('./global');
 
+import BackgroundTimer from 'react-native-background-timer';
+import { Actions, ActionConst } from 'react-native-router-flux';
 
 export default class LoginScreen extends Component {
+
+    constructor(props) {
+      super(props);
+
+      this.onLogin = this.onLogin.bind(this);
+    }
+
+
+    gotoPositions(){
+      Actions.positionsScreen({securities: this.state.securities, clients: this.state.clients, token: this.state.token}); 
+      //const goToPositions = () => Actions.positionsScreen({securities: this.state.securities, clients: this.state.clients, token: this.state.token}); 
+      //goToPositions();
+    }
+
+
     setSecuritiesList(responsedata){
       //this._showAlert('Download', 'Logged in successfull: ' + responsedata.access_token);
       //const { navigate } = this.props.navigation;
@@ -22,9 +39,17 @@ export default class LoginScreen extends Component {
         {
           securities: responsedata,
         },
-        () => AsyncStorage.setItem('SberPBAppState', JSON.stringify(this.state))
+        //() => AsyncStorage.setItem('SberPBAppState', JSON.stringify(this.state))
       );
 
+
+      const intervalId = BackgroundTimer.setTimeout(() => {
+        // this will be executed every 200 ms
+        // even when app is the the background
+        this.gotoPositions();
+        console.log('tic');
+      }, 200);
+        
       //navigate('Positions', {token: this.state.token, clients: this.state.clients, securities: this.state.securities});
     };
 
@@ -40,8 +65,8 @@ export default class LoginScreen extends Component {
         headers: {
           'Accept': 'application/json',
           'authorization': authorization,
-        },      
-      };      
+        },
+      };
       fetch(GLOBAL.API_PATH + "api/security", settings)
         .then((response) => response.json())
         .then((responseData) => {
@@ -60,8 +85,7 @@ export default class LoginScreen extends Component {
       this.setState(
         {
           clients: responsedata,
-        },
-        () => AsyncStorage.setItem('SberPBAppState', JSON.stringify(this.state))
+        }
       );
 
       //navigate('Positions', {token: this.state.token, clients: this.state.clients, securities: this.state.securities});
@@ -99,7 +123,7 @@ export default class LoginScreen extends Component {
           isLoggedIn: true,
           token: responsedata.access_token
         },
-        () => AsyncStorage.setItem('SberPBAppState', JSON.stringify(this.state))
+        //() => AsyncStorage.setItem('SberPBAppState', JSON.stringify(this.state))
       );
       this.requestClients();
       //navigate('Positions', {token: this.state.token, clients: this.state.clients, securities: this.state.securities});
@@ -140,7 +164,7 @@ export default class LoginScreen extends Component {
           .catch((error) => {
             this._showAlert('Login', 'Logged in with error: ' + error.message);
             //this.state.isLoading = false;
-            caller.setState({ isLoading: false });
+            //caller.setState({ isLoading: false });
             //this.state.resultsData = this.setPageGetResult([]);//this.getDataSource([])
           })    
 	}
@@ -168,7 +192,7 @@ export default class LoginScreen extends Component {
 				
 				<ButtonSubmit
 				  onLogin = {(event) => {
-		            this.onLogin(event);
+		            this.onLogin();
 		          }}
 				/>
 			</Wallpaper>

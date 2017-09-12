@@ -57,7 +57,7 @@ export default class ButtonSubmit extends Component {
 		// 	this.growAnimated.setValue(0);
 		// }, 2300);
 
-		this.props.onLogin(this);
+		this.props.onLogin();
 	}
 
 	_onGrow() {
@@ -85,7 +85,7 @@ export default class ButtonSubmit extends Component {
 			<View style={styles.container}>
 				<Animated.View style={{width: changeWidth}}>
 					<TouchableOpacity style={styles.button}
-						onPress={this._onPress}
+						onPress={this.props.onLogin}
 						activeOpacity={1} >
 							{this.state.isLoading ?
 								<Image source={spinner} style={styles.image} />
