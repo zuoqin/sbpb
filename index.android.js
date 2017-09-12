@@ -5,6 +5,7 @@ import {
   Text,
   View,
   Image,
+  Alert,
 } from 'react-native';
 
 import Main from './src/components/Main';

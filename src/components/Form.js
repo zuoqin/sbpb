@@ -25,11 +25,11 @@ export default class Form extends Component {
 			press: false,
 		};
 		this.showPass = this.showPass.bind(this);
-	}
+    }
 
-	showPass() {
-  this.state.press === false ? this.setState({ showPass: false, press: true }) :this.setState({ showPass: true, press: false });
-  }
+    showPass() {
+      this.state.press === false ? this.setState({ showPass: false, press: true }) :this.setState({ showPass: true, press: false });
+    }
 
 	render() {
 		return (
@@ -39,21 +39,26 @@ export default class Form extends Component {
 					placeholder='Username'
 					autoCapitalize={'none'}
 					returnKeyType={'done'}
-					autoCorrect={false} />
+					autoCorrect={false} 
+					onEditChange={this.props.onUserNameChange}
+				/>
 					
 				<UserInput source={passwordImg}
 					secureTextEntry={this.state.showPass}
 					placeholder='Password'
 					returnKeyType={'done'}
 					autoCapitalize={'none'}
-					autoCorrect={false} />
-					<TouchableOpacity
-						activeOpacity={0.7}
-						style={styles.btnEye}
-						onPress={this.showPass}
-					>
-						<Image source={eyeImg} style={styles.iconEye} />
-					</TouchableOpacity>
+					autoCorrect={false}
+
+					onEditChange={this.props.onPasswordChange}
+				/>
+				<TouchableOpacity
+					activeOpacity={0.7}
+					style={styles.btnEye}
+					onPress={this.showPass}
+				>
+					<Image source={eyeImg} style={styles.iconEye} />
+				</TouchableOpacity>
 			</KeyboardAvoidingView>
 		);
 	}

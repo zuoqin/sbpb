@@ -18,6 +18,7 @@ const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 
+
 export default class ButtonSubmit extends Component {
 	constructor() {
 		super();
@@ -31,29 +32,32 @@ export default class ButtonSubmit extends Component {
 		this._onPress = this._onPress.bind(this);
 	}
 
+
 	_onPress() {
 		if (this.state.isLoading) return;
 
 		this.setState({ isLoading: true });
-		Animated.timing(
-			this.buttonAnimated,
-			{
-				toValue: 1,
-				duration: 200,
-				easing: Easing.linear
-			}
-		).start();
+		// Animated.timing(
+		// 	this.buttonAnimated,
+		// 	{
+		// 		toValue: 1,
+		// 		duration: 200,
+		// 		easing: Easing.linear
+		// 	}
+		// ).start();
 
-		setTimeout(() => {
-			this._onGrow();
-		}, 2000);
+		// setTimeout(() => {
+		// 	this._onGrow();
+		// }, 2000);
 
-		setTimeout(() => {
-			Actions.secondScreen();
-			this.setState({ isLoading: false });
-			this.buttonAnimated.setValue(0);
-			this.growAnimated.setValue(0);
-		}, 2300);
+		// setTimeout(() => {
+		// 	Actions.secondScreen();
+		// 	this.setState({ isLoading: false });
+		// 	this.buttonAnimated.setValue(0);
+		// 	this.growAnimated.setValue(0);
+		// }, 2300);
+
+		this.props.onLogin(this);
 	}
 
 	_onGrow() {
@@ -99,7 +103,7 @@ export default class ButtonSubmit extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		top: -95,
+		top: 5,
 		alignItems: 'center',
 		justifyContent: 'flex-start',
 	},

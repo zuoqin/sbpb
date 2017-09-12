@@ -11,7 +11,7 @@ export default class Main extends Component {
 	      <Scene key="root">
 	        <Scene key="loginScreen"
 	          component={LoginScreen}
-	        	animation='fade'
+	          animation='fade'
 	          hideNavBar={true}
 	          initial={true}
 	        />
