@@ -13,14 +13,15 @@ import {
 
 GLOBAL = require('./global');
 
-import BackgroundTimer from 'react-native-background-timer';
 import { Actions, ActionConst } from 'react-native-router-flux';
 
 export default class LoginScreen extends Component {
 
     constructor(props) {
       super(props);
-
+      this.state = {
+        isLoading: false,
+      }
       this.onLogin = this.onLogin.bind(this);
     }
 
@@ -42,13 +43,10 @@ export default class LoginScreen extends Component {
         //() => AsyncStorage.setItem('SberPBAppState', JSON.stringify(this.state))
       );
 
-
-      const intervalId = BackgroundTimer.setTimeout(() => {
-        // this will be executed every 200 ms
-        // even when app is the the background
+      setTimeout(() => {
         this.gotoPositions();
-        console.log('tic');
       }, 200);
+
         
       //navigate('Positions', {token: this.state.token, clients: this.state.clients, securities: this.state.securities});
     };
@@ -142,13 +140,17 @@ export default class LoginScreen extends Component {
     }
 
 
-	onLogin(caller){
+	  onLogin(){
+        if(this.state === null || this.state.password === undefined)
+          return;
         var body = 'grant_type=password&username=' + this.state.username + '&password=' + this.state.password;
-
+        this.setState({ isLoading: true });
+        Actions.refresh()
         console.log('trying to login with body: ' + body);
+
         var settings = {
-		  method: "POST",
-		  headers: {
+          method: "POST",
+		      headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded',
           },
@@ -166,7 +168,7 @@ export default class LoginScreen extends Component {
             //this.state.isLoading = false;
             //caller.setState({ isLoading: false });
             //this.state.resultsData = this.setPageGetResult([]);//this.getDataSource([])
-          })    
+          })
 	}
 
 
@@ -191,7 +193,8 @@ export default class LoginScreen extends Component {
 				/>
 				
 				<ButtonSubmit
-				  onLogin = {(event) => {
+          isLoading = {this.state.isLoading}
+          onLogin = {(event) => {
 		            this.onLogin();
 		          }}
 				/>

@@ -13,7 +13,7 @@ import {
   Picker,
   View,
   Linking,
-  AsyncStorage,
+  Image,
   ListView,
   ScrollView,
 
@@ -24,11 +24,9 @@ import {
   Alert,
 } from 'react-native';
 
-import BackgroundTimer from 'react-native-background-timer';
-
 import { Actions, ActionConst } from 'react-native-router-flux';
 import PositionCell from './PositionCell';
-
+import spinner from '../images/loading.gif';
 GLOBAL = require('./global');
 
 export default class PositionsScreen extends React.Component{
@@ -58,7 +56,7 @@ export default class PositionsScreen extends React.Component{
 
   setClientAndPositions(){
     this.setState({selectedclient: this.props.clients[0].code});
-    const intervalId = BackgroundTimer.setTimeout(() => {
+    setTimeout(() => {
       // this will be executed every 200 ms
       // even when app is the the background
       this.getPositions();
@@ -68,8 +66,7 @@ export default class PositionsScreen extends React.Component{
 
   componentDidMount() {
   {
-    
-    const intervalId = BackgroundTimer.setTimeout(() => {
+    setTimeout(() => {
       // this will be executed every 200 ms
       // even when app is the the background
       this.setClientAndPositions();
@@ -115,7 +112,7 @@ export default class PositionsScreen extends React.Component{
 
   setPositions(responseData){
     console.log(responseData.length);
-    this.state.isLoading = false;
+    this.setState({isLoading: false});
     this.getDataSource(responseData);
   };
 
@@ -129,7 +126,7 @@ export default class PositionsScreen extends React.Component{
       this._showAlert('Download', 'Downloading, please wait...');
       return;
     }
-    this.state.isLoading = true;
+    this.setState({isLoading: true});
 
     var settings = {
       method: "GET",
@@ -142,12 +139,14 @@ export default class PositionsScreen extends React.Component{
     fetch(GLOBAL.API_PATH + "api/position?client=" + this.state.selectedclient, settings)
       .then((response) => response.json())
       .then((responseData) => {
+          this.setState({isLoading: false});
           this.setPositions(responseData);
+          
           console.log('On Get Positions');
         })
       .catch((error) => {
         this._showAlert('Download', 'Download Positions failed with error: ' + error.message);
-        this.state.isLoading = false;
+        this.setState({isLoading: false});
       });
 
   };
@@ -175,7 +174,7 @@ export default class PositionsScreen extends React.Component{
     this.setState({selectedclient: client});
 
     // Start a timer that runs once after X milliseconds
-    const intervalId = BackgroundTimer.setTimeout(() => {
+    setTimeout(() => {
       // this will be executed every 200 ms
       // even when app is the the background
       this.getPositions();
@@ -248,12 +247,16 @@ export default class PositionsScreen extends React.Component{
             {this.showclients(this.props.clients)}
           </Picker>
 
-
-          <ListView
-            style={styles.list}
-            dataSource={this.state.dataSource}
-            renderRow={this.renderRow.bind(this)}
-          />          
+          {this.state.isLoading ?
+            <Image source={spinner} style={styles.image} />
+            :
+            <ListView
+              style={styles.list}
+              dataSource={this.state.dataSource}
+              renderRow={this.renderRow.bind(this)}
+            />  
+          }
+        
         </View>
       )
 
@@ -290,7 +293,10 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
-
+  image: {
+    width: 96,
+    height: 96,
+  },
   list: {
     flexDirection: 'row',
     flexWrap: 'wrap'

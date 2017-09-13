@@ -18,7 +18,6 @@ const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 
-
 export default class ButtonSubmit extends Component {
 	constructor() {
 		super();
@@ -32,7 +31,6 @@ export default class ButtonSubmit extends Component {
 		this._onPress = this._onPress.bind(this);
 	}
 
-
 	_onPress() {
 		if (this.state.isLoading) return;
 
@@ -45,10 +43,13 @@ export default class ButtonSubmit extends Component {
 		// 		easing: Easing.linear
 		// 	}
 		// ).start();
-
-		// setTimeout(() => {
-		// 	this._onGrow();
-		// }, 2000);
+		this.props.onLogin(this);
+      //const intervalId = BackgroundTimer.setTimeout(() => {
+        // this will be executed every 200 ms
+        // even when app is the the background
+      //  this.props.onLogin();
+      //  console.log('tic');
+      //}, 200);
 
 		// setTimeout(() => {
 		// 	Actions.secondScreen();
@@ -57,9 +58,11 @@ export default class ButtonSubmit extends Component {
 		// 	this.growAnimated.setValue(0);
 		// }, 2300);
 
-		this.props.onLogin();
+		
 	}
-
+	componentWillReceiveProps(newProps) {
+	    this.setState({isLoading: newProps.isLoading});
+	}
 	_onGrow() {
 		Animated.timing(
 			this.growAnimated,
