@@ -28,6 +28,9 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 import PositionCell from './PositionCell';
 import spinner from '../images/loading.gif';
 GLOBAL = require('./global');
+const Dimensions = require('Dimensions');
+const AndroidWindow = Dimensions.get('window');
+
 
 export default class PositionsScreen extends React.Component{
   static navigationOptions = {
@@ -55,7 +58,7 @@ export default class PositionsScreen extends React.Component{
 
 
   setClientAndPositions(){
-    this.setState({selectedclient: this.props.clients[0].code});
+    this.setState({selectedclient: 'AGGRESSIVE'});
     setTimeout(() => {
       // this will be executed every 200 ms
       // even when app is the the background
@@ -107,7 +110,27 @@ export default class PositionsScreen extends React.Component{
     this.isUpdated = false;
     this.setState({dataSource: this.ds.cloneWithRows(positions)});
     this.isUpdated = true;
+
+
+    for (var i=0; i < positions.length; i++) {
+      var bfound = false;
+      for (var k=0; k < this.props.securities.length; k++) {
+          if (this.props.securities[k].id === Number(positions[i][0])) {
+              console.log('found sec11111: ' + this.props.securities[k].acode);
+              bfound = true;
+              break;              
+          }
+      }
+      if(bfound === false)
+      {
+        console.log('not found sec: ' + positions[i][0]);
+      }
+    }
+
+
     return this.state.dataSource.cloneWithRows(positions);
+
+
   }
 
   setPositions(responseData){
@@ -127,6 +150,7 @@ export default class PositionsScreen extends React.Component{
       return;
     }
     this.setState({isLoading: true});
+    this.setState({dataSource: this.ds.cloneWithRows([])});
 
     var settings = {
       method: "GET",
@@ -183,6 +207,18 @@ export default class PositionsScreen extends React.Component{
   }
 
 
+  renderHeader(){
+    return(
+      <View>
+        <Picker
+          selectedValue={this.state.selectedclient}
+          onValueChange={(itemValue, itemIndex) => this.onClientChange(itemValue, itemIndex)}>
+          {this.showclients(this.props.clients)}
+        </Picker>
+      </View>
+    );
+  }
+
 
   renderSeparator(
     sectionID: number | string,
@@ -208,7 +244,7 @@ export default class PositionsScreen extends React.Component{
     var nLength = 15;
     if(position[0] !== undefined) 
     {
-      console.log('position title: ' + position[0]);
+      //console.log('position title: ' + position[0]);
       sTitle = position[0];
     }
     nLength = sTitle.length;
@@ -238,28 +274,19 @@ export default class PositionsScreen extends React.Component{
   }
 
 
-  render() {    
-      return (
-        <View>
-          <Picker
-            selectedValue={this.state.selectedclient}
-            onValueChange={(itemValue, itemIndex) => this.onClientChange(itemValue, itemIndex)}>
-            {this.showclients(this.props.clients)}
-          </Picker>
-
-          {this.state.isLoading ?
-            <Image source={spinner} style={styles.image} />
-            :
-            <ListView
+  render() {
+      if(this.state.isLoading == true){
+        return(<Image source={spinner} style={styles.image} />);
+      }   
+      else{
+            return(<ListView
+              pageSize={100}              
               style={styles.list}
               dataSource={this.state.dataSource}
               renderRow={this.renderRow.bind(this)}
-            />  
-          }
-        
-        </View>
-      )
-
+              renderHeader={this.renderHeader.bind(this)}
+            />)   
+      }
   }
 
 
@@ -298,7 +325,9 @@ const styles = StyleSheet.create({
     height: 96,
   },
   list: {
-    flexDirection: 'row',
-    flexWrap: 'wrap'
+    padding: 0,
+    marginTop: 0,
+    flex: 1,
+    
   },  
 });

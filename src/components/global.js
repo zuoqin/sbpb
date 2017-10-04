@@ -1,5 +1,5 @@
 module.exports = {
-  API_PATH: 'http://10.10.246.131:3000/',
+  API_PATH: 'http://10.10.246.28:3000/',
   BASE_URL: 'http://someurl.com',
   COLOR: {
     ORANGE: '#C50',

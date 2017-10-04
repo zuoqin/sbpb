@@ -77,11 +77,14 @@ var BGWASH = 'rgba(255,255,255,0.8)';
 class PositionCell extends Component {
 
   searchsecs(secid){
+    var found = false;
     for (var i=0; i < this.props.securities.length; i++) {
         if (this.props.securities[i].id === secid) {
+            console.log('found sec: ' + this.props.securities[i].acode);
             return this.props.securities[i];
         }
     }
+    console.log('sec not found: ' + secid);
   }
 
   addSpaces(nStr) {
@@ -102,12 +105,12 @@ class PositionCell extends Component {
       return (
       <View style={{flexDirection: 'row', height: 30, padding: 1}}>
         <Text style={{width: 80,}}>{security.acode}</Text>
-        
         <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(this.props.position[1].amount.toString())}</Text>
 
-        <Text style={{textAlign: 'right', width: 60,}}>{this.addSpaces(Math.round(this.props.position[1].price * 100)/100.0.toString())}</Text>
+        <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(Math.round(this.props.position[1].price * 100)/100.0.toString())}</Text>
 
         <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(Math.round(this.props.position[1].rubprice * 100)/100.0.toString())}</Text>
+        
       </View>
       );      
     } else{

@@ -141,8 +141,13 @@ export default class LoginScreen extends Component {
 
 
 	  onLogin(){
+        this.setState({username: 'admin', password: 'Qwerty123'});
+        this.state.username = 'admin';
+        this.state.password = 'Qwerty123';
+        
         if(this.state === null || this.state.password === undefined)
           return;
+
         var body = 'grant_type=password&username=' + this.state.username + '&password=' + this.state.password;
         this.setState({ isLoading: true });
         Actions.refresh()
