@@ -296,21 +296,30 @@ export default class PositionsScreen extends React.Component{
         return(<Image source={spinner} style={styles.image} />);
       }   
       else{
-            return(<SectionList
-              securities={this.props.securities}
-              positions={this.state.positions}
-              renderSectionHeader={({section}) => <Text>{section.title}</Text>}           
-              style={styles.list}
+            return(
+            <View>
+              <Picker
+                selectedValue={this.state.selectedclient}
+                onValueChange={(itemValue, itemIndex) => this.onClientChange(itemValue, itemIndex)}>
+                {this.showclients(this.props.clients)}
+              </Picker>            
+              <SectionList
+                securities={this.props.securities}
+                positions={this.state.positions}
+                renderSectionHeader={({section}) => <Text>{section.title}</Text>}           
+                style={styles.list}
 
-              sections={[
-                {data: this.getAssets(1, this.state.positions, this.props.securities), title: "Stocks"},
-                {data: this.getAssets(5, this.state.positions, this.props.securities), title: "Bonds"},
-                {data: this.getAssets(15, this.state.positions, this.props.securities), title: "Derivatives"},
-              ]}              
-              
-              renderItem={this.renderRow.bind(this)}
-              renderHeader={this.renderHeader.bind(this)}
-            />)   
+                sections={[
+                  {data: this.getAssets(1, this.state.positions, this.props.securities), title: "Stocks"},
+                  {data: this.getAssets(5, this.state.positions, this.props.securities), title: "Bonds"},
+                  {data: this.getAssets(15, this.state.positions, this.props.securities), title: "Derivatives"},
+                ]}              
+                
+                renderItem={this.renderRow.bind(this)}
+                renderHeader={this.renderHeader.bind(this)}
+              />
+            </View>
+            )   
       }
   }
 
@@ -352,7 +361,7 @@ const styles = StyleSheet.create({
   list: {
     padding: 0,
     marginTop: 0,
-    flex: 1,
+    height: 587,
     
   },  
 });
