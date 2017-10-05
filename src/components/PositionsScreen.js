@@ -16,7 +16,7 @@ import {
   Image,
   ListView,
   ScrollView,
-
+  SectionList,
   TouchableHighlight,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
@@ -46,7 +46,7 @@ export default class PositionsScreen extends React.Component{
     this.state = {
       language: "js",
       isLoggedIn: true,
-
+      positions: [],
       isLoading: false,
       page: -1,
       searchMode: false,
@@ -110,7 +110,7 @@ export default class PositionsScreen extends React.Component{
     this.isUpdated = false;
     this.setState({dataSource: this.ds.cloneWithRows(positions)});
     this.isUpdated = true;
-
+    this.setState({positions: positions});
 
     for (var i=0; i < positions.length; i++) {
       var bfound = false;
@@ -134,9 +134,10 @@ export default class PositionsScreen extends React.Component{
   }
 
   setPositions(responseData){
+
     console.log(responseData.length);
-    this.setState({isLoading: false});
-    this.getDataSource(responseData);
+    this.setState({isLoading: false, positions: responseData});
+    //this.getDataSource(responseData);
   };
 
   getPositions(){
@@ -273,17 +274,41 @@ export default class PositionsScreen extends React.Component{
     )    
   }
 
+  getAssets(assettype, positions, securities){
+    return positions.filter(function(position){
+      for (var k=0; k < securities.length; k++) {
+          if (securities[k].id === Number(position[0])) {
+              //console.log('found sec11111: ' + this.props.securities[k].acode);
+              //bfound = true;
+              if(securities[k].assettype == assettype){
+                return true;
+              }
+              else{
+                return false;
+              } 
+          }
+      }
+    });    
+  }
 
   render() {
       if(this.state.isLoading == true){
         return(<Image source={spinner} style={styles.image} />);
       }   
       else{
-            return(<ListView
-              pageSize={100}              
+            return(<SectionList
+              securities={this.props.securities}
+              positions={this.state.positions}
+              renderSectionHeader={({section}) => <Text>{section.title}</Text>}           
               style={styles.list}
-              dataSource={this.state.dataSource}
-              renderRow={this.renderRow.bind(this)}
+
+              sections={[
+                {data: this.getAssets(1, this.state.positions, this.props.securities), title: "Stocks"},
+                {data: this.getAssets(5, this.state.positions, this.props.securities), title: "Bonds"},
+                {data: this.getAssets(15, this.state.positions, this.props.securities), title: "Derivatives"},
+              ]}              
+              
+              renderItem={this.renderRow.bind(this)}
               renderHeader={this.renderHeader.bind(this)}
             />)   
       }

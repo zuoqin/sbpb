@@ -100,16 +100,16 @@ class PositionCell extends Component {
   }
 
   render() {
-    var security = this.searchsecs(parseInt(this.props.position[0]));
+    var security = this.searchsecs(parseInt(this.props.position.item[0]));
     if(security !== undefined){
       return (
       <View style={{flexDirection: 'row', height: 30, padding: 1}}>
         <Text style={{width: 80,}}>{security.acode}</Text>
-        <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(this.props.position[1].amount.toString())}</Text>
+        <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(this.props.position.item[1].amount.toString())}</Text>
 
-        <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(Math.round(this.props.position[1].price * 100)/100.0.toString())}</Text>
+        <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(Math.round(this.props.position.item[1].price * 100)/100.0.toString())}</Text>
 
-        <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(Math.round(this.props.position[1].rubprice * 100)/100.0.toString())}</Text>
+        <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(Math.round(this.props.position.item[1].rubprice * 100)/100.0.toString())}</Text>
         
       </View>
       );      
@@ -124,7 +124,7 @@ class PositionCell extends Component {
             <View style={styles.cellContainer}>
 
               <View style={styles.cellTextContainer}>
-                <Text>Unknown security {parseInt(this.props.position[0])}</Text>
+                <Text>Unknown security {parseInt(this.props.position.item[0])}</Text>
               </View>
             </View>
           </TouchableHighlight>
