@@ -56,6 +56,11 @@ export default class PositionsScreen extends React.Component{
     }
   };
 
+  gotoTrades(){
+    Actions.tradesScreen({securities: this.state.securities, clients: this.state.clients, token: this.state.token}); 
+    //const goToPositions = () => Actions.positionsScreen({securities: this.state.securities, clients: this.state.clients, token: this.state.token}); 
+    //goToPositions();
+  }
 
   setClientAndPositions(){
     this.setState({selectedclient: 'AGGRESSIVE'});
@@ -291,6 +296,22 @@ export default class PositionsScreen extends React.Component{
     });    
   }
 
+  renderSectionHeader(section){
+    return(
+      <View style={{flex: 1, flexDirection: 'column'}}>
+        <View>
+          <Text style={{fontWeight: 'bold'}}>{section.section.title}</Text>
+        </View>
+        <View style={{flex: 1, flexDirection: 'row', padding: 1}}>
+          <Text style={{width: 90,  textAlign: 'center', fontWeight: 'bold'}}>Инструмент</Text>
+          <Text style={{width: 90, textAlign: 'center', fontWeight: 'bold'}}>Количество</Text>
+          <Text style={{width: 100, textAlign: 'center', fontWeight: 'bold'}}>Цена приобретения</Text>
+          <Text style={{width: 100, textAlign: 'center', fontWeight: 'bold'}}>Прибыль USD</Text>
+        </View>
+      </View>
+    )
+  }
+
   render() {
       if(this.state.isLoading == true){
         return(<Image source={spinner} style={styles.image} />);
@@ -306,7 +327,7 @@ export default class PositionsScreen extends React.Component{
               <SectionList
                 securities={this.props.securities}
                 positions={this.state.positions}
-                renderSectionHeader={({section}) => <Text>{section.title}</Text>}           
+                renderSectionHeader={this.renderSectionHeader.bind(this)}           
                 style={styles.list}
 
                 sections={[
@@ -325,13 +346,15 @@ export default class PositionsScreen extends React.Component{
 
 
   selectMediaItem(positionItem) {
-
-    var props = {onNavigate: this.props.passProps.onNavigate,
-      empid: positionItem.empid,
-      birthday: employeeItem.birthday,
-      empname: employeeItem.empname
-    }
-    //this.props.passProps.onNavigate(UIExplorerActions.ModuleAction('NewEmployeeDetail', props));
+    Actions.tradesScreen(
+      {
+        selectedclient: this.state.selectedclient,
+        selectedsecurity: positionItem.item[0],
+        securities: this.props.securities,
+        clients: this.props.clients,
+        token: this.props.token
+      }
+    ); 
   };
 
 

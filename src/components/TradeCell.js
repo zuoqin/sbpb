@@ -74,7 +74,7 @@ var styles = StyleSheet.create({
 });
 
 var BGWASH = 'rgba(255,255,255,0.8)';
-class PositionCell extends Component {
+class TradeCell extends Component {
 
   searchsecs(secid){
     var found = false;
@@ -100,47 +100,22 @@ class PositionCell extends Component {
   }
 
   render() {
-    var security = this.searchsecs(parseInt(this.props.position.item[0]));
+    var security = this.searchsecs(parseInt(this.props.trade.item.security));
     if(security !== undefined){
       return (
-      <View style={{flexDirection: 'row', height: 30, padding: 1}}>
-        <TouchableHighlight
-          onPress={this.props.onSelect}>
-          <Text style={{width: 80,}}>{security.acode}</Text>
-        </TouchableHighlight>
 
-        <TouchableHighlight
-          onPress={this.props.onSelect}>        
-          <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(this.props.position.item[1].amount.toString())}</Text>
-        </TouchableHighlight>
-
-
-        <TouchableHighlight
-          onPress={this.props.onSelect}>
-          <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(Math.round(this.props.position.item[1].price * 100)/100.0.toString())}</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight
-          onPress={this.props.onSelect}>
-          <Text style={{textAlign: 'right', width: 100,}}>{this.addSpaces(Math.round(this.props.position.item[1].rubprice * 100)/100.0.toString())}</Text>
-        </TouchableHighlight>        
+      <View style={{flexDirection: 'row', height: 100, padding: 1}}>
+        <Text style={{width: 90,}}>{this.props.trade.item.valuedate.substring(0, 10)}</Text>
+        <Text style={{textAlign: 'right',  width: 90,}}>{this.addSpaces(this.props.trade.item.nominal.toString())}</Text>
+        <Text style={{textAlign: 'center', width: 50,}}>{this.props.trade.item.direction}</Text>
+        <Text style={{textAlign: 'right', width: 50,}}>{this.addSpaces(Math.round(this.props.trade.item.price * 100)/100.0.toString())}</Text>
+        <Text style={{textAlign: 'center', width: 60,}}>{this.props.trade.item.currency}</Text>
       </View>
       );      
     } else{
       return (
-        <View>
-          <TouchableHighlight
-            onPress={this.props.onSelect}
-            onShowUnderlay={this.props.onHighlight}
-            onHideUnderlay={this.props.onDeHighlight}
-          >
-            <View style={styles.cellContainer}>
-
-              <View style={styles.cellTextContainer}>
-                <Text>Unknown security {parseInt(this.props.position.item[0])}</Text>
-              </View>
-            </View>
-          </TouchableHighlight>
+        <View style={styles.cellTextContainer}>
+          <Text>Unknown security {parseInt(this.props.trade.item[0])}</Text>
         </View>
       );
     }
@@ -149,4 +124,4 @@ class PositionCell extends Component {
 };
 
 
-module.exports = PositionCell;
+module.exports = TradeCell;

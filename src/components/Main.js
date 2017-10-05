@@ -4,6 +4,7 @@ import { Router, Scene, Actions, ActionConst } from 'react-native-router-flux';
 import LoginScreen from './LoginScreen';
 import SecondScreen from './SecondScreen';
 import PositionsScreen from './PositionsScreen';
+import TradesScreen from './TradesScreen';
 
 export default class Main extends Component {
   render() {
@@ -16,10 +17,15 @@ export default class Main extends Component {
 	          hideNavBar={true}
 	          initial={true}
 	        />
-	        <Scene key="positionsScreen"
-	          component={PositionsScreen}
-	          animation='fade'
-	          hideNavBar={true}
+            <Scene key="positionsScreen"
+              component={PositionsScreen}
+              animation='fade'
+              hideNavBar={true}
+	        />
+            <Scene key="tradesScreen"
+              component={TradesScreen}
+              animation='fade'
+              hideNavBar={true}
 	        />
 	      </Scene>
 	    </Router>
